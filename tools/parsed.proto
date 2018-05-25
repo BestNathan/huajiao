@@ -1,0 +1,259 @@
+syntax = "proto2";
+message CRPair {
+  required string key = 1;
+  optional bytes value = 2;
+}
+
+message CRUser {
+  optional bytes userid = 1;
+  optional string name = 2;
+  repeated CRPair publicsetting = 3;
+  repeated CRPair privatesetting = 4;
+  optional int32 status = 5;
+  optional bytes userdata = 6;
+}
+
+message ChatRoom {
+  required bytes roomid = 1;
+  optional CRUser creater = 2;
+  optional string name = 3;
+  optional uint64 version = 4;
+  optional uint64 maxmsgid = 5;
+  optional uint64 memcountlimit = 6;
+  optional string roomtype = 7;
+  repeated CRPair properties = 8;
+  repeated CRUser members = 9;
+  repeated bytes blacklist = 10;
+  optional string gameid = 11;
+  repeated CRUser tempmembers = 12;
+  optional bytes partnerdata = 13;
+}
+
+message CreateChatRoomRequest {
+  optional string gameid = 1;
+  optional string roomname = 2;
+  optional uint64 memcountlimit = 3;
+  optional string roomtype = 4;
+  repeated CRUser members = 5;
+  optional CRUser creater = 6;
+  repeated CRPair properties = 7;
+}
+
+message CreateChatRoomResponse {
+  optional ChatRoom room = 1;
+}
+
+message CreateMultiChatRoomRequest {
+  repeated CreateChatRoomRequest rooms = 1;
+  optional CRUser creater = 2;
+}
+
+message CreateMultiChatRoomResponse {
+  repeated ChatRoom rooms = 1;
+  optional CRUser creater = 2;
+}
+
+message GetChatRoomDetailRequest {
+  required bytes roomid = 1;
+  optional int32 index = 2;
+  optional int32 offset = 3;
+}
+
+message GetChatRoomDetailResponse {
+  optional ChatRoom room = 1;
+}
+
+message ApplyJoinChatRoomRequest {
+  required bytes roomid = 1;
+  optional ChatRoom room = 2;
+  optional int32 userid_type = 3;
+  optional bytes userdata = 4;
+  optional bool no_userlist = 5;
+}
+
+message ApplyJoinChatRoomResponse {
+  optional ChatRoom room = 1;
+  optional bool pull_lost = 2[default = true];
+}
+
+message QuitChatRoomRequest {
+  required bytes roomid = 1;
+  optional ChatRoom room = 2;
+}
+
+message QuitChatRoomResponse {
+  optional ChatRoom room = 1;
+}
+
+message QueryAllGameRoomRequest {
+}
+
+message QueryAllGameRoomResponse {
+  repeated CRPair maplist = 1;
+}
+
+message QueryChatRoomIDRequest {
+  required string gameid = 1;
+}
+
+message QueryChatRoomIDResponse {
+  optional bytes roomid = 1;
+  optional string gameid = 2;
+}
+
+message UpdateRoomIDRequest {
+  required string gameid = 1;
+  required bytes roomid = 2;
+}
+
+message UpdateRoomIDResponse {
+}
+
+message UpdateChatRoomRequest {
+  required bytes roomid = 1;
+  required ChatRoom room = 2;
+}
+
+message UpdateChatRoomResponse {
+  optional ChatRoom room = 1;
+}
+
+message KickChatRoomMemberRequest {
+  required bytes roomid = 1;
+  repeated CRUser members = 2;
+  optional ChatRoom room = 3;
+}
+
+message KickChatRoomMemberResponse {
+  optional ChatRoom room = 1;
+}
+
+message SyncRoomToDBRequest {
+  required bytes roomid = 1;
+}
+
+message CreateChatRoomNotify {
+  required ChatRoom room = 1;
+}
+
+message MemberJoinChatRoomNotify {
+  required ChatRoom room = 1;
+}
+
+message MemberQuitChatRoomNotify {
+  required ChatRoom room = 1;
+}
+
+message KickMemberNotify {
+  required ChatRoom room = 1;
+  optional CRUser user = 2;
+}
+
+message UpdateChatRoomNotify {
+  required ChatRoom room = 1;
+  optional CRUser user = 2;
+}
+
+message ChatRoomMessageRequest {
+  optional CRUser sender = 1;
+  required bytes roomid = 2;
+  required int32 msgtype = 3;
+  optional bytes msgcontent = 4;
+  optional bytes clientparameter = 5;
+  optional bytes clientcache = 6;
+  optional CreateChatRoomNotify createnotify = 7;
+  optional MemberJoinChatRoomNotify joinnotify = 8;
+  optional MemberQuitChatRoomNotify quitnotify = 9;
+  optional KickMemberNotify kicknotify = 10;
+  optional UpdateChatRoomNotify updatenotify = 11;
+  repeated CRPair propertylist = 12;
+}
+
+message ChatRoomMessageResponse {
+  optional uint64 msgid = 1;
+}
+
+message ChatRoomNewMsg {
+  required bytes roomid = 1;
+  optional CRUser sender = 2;
+  optional int32 msgtype = 3;
+  optional bytes msgcontent = 4;
+  optional int32 regmemcount = 5;
+  optional int32 memcount = 6;
+  optional uint32 msgid = 7;
+  optional uint32 maxid = 8;
+  optional uint64 timestamp = 9;
+}
+
+message ChatRoomErrorMsg {
+  required bytes roomid = 1;
+  required uint64 clientsn = 2;
+  optional int32 errorcode = 3;
+}
+
+message ChatRoomMNotify {
+  required int32 type = 1;
+  required bytes data = 2;
+  optional int32 regmemcount = 3;
+  optional int32 memcount = 4;
+}
+
+message SubscribeRequest {
+  required bytes roomid = 1;
+  optional bool sub = 2;
+}
+
+message SubscribeResponse {
+  required bytes roomid = 1;
+  optional bool sub = 2;
+}
+
+message ChatRoomUpToServer {
+  required uint32 payloadtype = 1;
+  optional CreateChatRoomRequest createchatroomreq = 2;
+  optional GetChatRoomDetailRequest getchatroominforeq = 3;
+  optional ApplyJoinChatRoomRequest applyjoinchatroomreq = 4;
+  optional QuitChatRoomRequest quitchatroomreq = 5;
+  optional UpdateChatRoomRequest updatechatroomreq = 6;
+  optional KickChatRoomMemberRequest kickmemberreq = 7;
+  optional QueryChatRoomIDRequest querychatroomidreq = 8;
+  optional UpdateRoomIDRequest updategameidreq = 9;
+  optional QueryAllGameRoomRequest queryallgameroomreq = 10;
+  optional ChatRoomMessageRequest chatroommessagereq = 11;
+  optional CreateMultiChatRoomRequest createrooms = 12;
+  optional SyncRoomToDBRequest syncroomtodba = 13;
+  optional SubscribeRequest subreq = 14;
+}
+
+message ChatRoomDownToUser {
+  required int32 result = 1;
+  required uint32 payloadtype = 2;
+  optional CreateChatRoomResponse createchatroomresp = 3;
+  optional GetChatRoomDetailResponse getchatroominforesp = 4;
+  optional ApplyJoinChatRoomResponse applyjoinchatroomresp = 5;
+  optional QuitChatRoomResponse quitchatroomresp = 6;
+  optional UpdateChatRoomResponse updatechatroomresp = 7;
+  optional KickChatRoomMemberResponse kickmemberresp = 8;
+  optional QueryChatRoomIDResponse querychatroomidresp = 9;
+  optional UpdateRoomIDResponse updategameidresp = 10;
+  optional QueryAllGameRoomResponse queryallgameroomresp = 11;
+  optional ChatRoomMessageResponse chatroommessageresp = 12;
+  optional ChatRoomNewMsg newmsgnotify = 13;
+  optional ChatRoomErrorMsg errormsgnotify = 14;
+  optional CreateMultiChatRoomResponse createrooms = 15;
+  optional MemberJoinChatRoomNotify memberjoinnotify = 16;
+  optional MemberQuitChatRoomNotify memberquitnotify = 17;
+  optional SubscribeResponse subresp = 18;
+  optional bytes reason = 100;
+  repeated ChatRoomMNotify multinotify = 200;
+}
+
+message ChatRoomPacket {
+  required bytes roomid = 1;
+  optional ChatRoomUpToServer to_server_data = 2;
+  optional ChatRoomDownToUser to_user_data = 3;
+  optional string uuid = 4;
+  optional uint64 client_sn = 5;
+  optional uint32 appid = 6;
+}
+

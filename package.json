@@ -1,0 +1,21 @@
+{
+  "name": "huajiao",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "debug": "set DEBUG=connector && node ./lib/connector",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Nathan",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "google-protobuf": "^3.5.0",
+    "websocket": "^1.0.26"
+  },
+  "devDependencies": {
+    "debug": "^3.1.0"
+  }
+}
