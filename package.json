@@ -1,7 +1,7 @@
 {
   "name": "huajiao",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "huajiao danmu Server",
   "main": "index.js",
   "scripts": {
     "debug": "set DEBUG=connector && node ./lib/connector",
@@ -11,8 +11,15 @@
   "author": "Nathan",
   "license": "MIT",
   "dependencies": {
+    "@koa/cors": "^2.2.1",
     "axios": "^0.18.0",
     "google-protobuf": "^3.5.0",
+    "koa": "^2.5.1",
+    "koa-compress": "^3.0.0",
+    "koa-logger": "^3.2.0",
+    "koa-onerror": "^4.0.0",
+    "koa-static": "^4.0.3",
+    "socket.io": "^2.1.1",
     "websocket": "^1.0.26"
   },
   "devDependencies": {
